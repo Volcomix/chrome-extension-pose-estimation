@@ -1,0 +1,22 @@
+{
+  "name": "pose-estimation-extension",
+  "version": "1.0.0",
+  "description": "Chrome extension to estimate multiple poses from videos ",
+  "repository": "https://github.com/Volcomix/chrome-extension-pose-estimation.git",
+  "author": "Volcomix <Volcomix@users.noreply.github.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "yarn build --watch",
+    "build": "esbuild content-script.js --outdir=out --bundle"
+  },
+  "dependencies": {
+    "@mediapipe/pose": "~0.4.0",
+    "@tensorflow-models/pose-detection": "^0.0.6",
+    "@tensorflow/tfjs-backend-wasm": "^3.12.0",
+    "@tensorflow/tfjs-backend-webgl": "^3.12.0",
+    "@tensorflow/tfjs-converter": "^3.12.0",
+    "@tensorflow/tfjs-core": "^3.12.0",
+    "esbuild": "^0.14.9"
+  }
+}
