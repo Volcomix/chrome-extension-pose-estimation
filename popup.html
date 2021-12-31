@@ -5,8 +5,12 @@
   </head>
   <body>
     <progress></progress>
-    <select id="source" hidden></select>
-    <span id="no-source" hidden>No source found</span>
+    <span id="without-sources" hidden>No source found</span>
+    <div id="with-sources" hidden>
+      <select id="source"></select>
+      <button id="detect">Start detection</button>
+    </div>
+  </div>
     <script type="module" src="popup.js"></script>
   </body>
 </html>

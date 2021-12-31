@@ -1,8 +1,22 @@
+body {
+  margin: 16px;
+}
+
 select {
   min-width: 150px;
   max-width: 600px;
 }
 
-#no-source {
+#without-sources {
   white-space: nowrap;
+}
+
+#with-sources:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#source {
+  margin-bottom: 8px;
 }

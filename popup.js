@@ -1,6 +1,7 @@
 const progress = document.querySelector("progress");
+const withoutSources = document.querySelector("#without-sources");
+const withSources = document.querySelector("#with-sources");
 const source = document.querySelector("#source");
-const noSource = document.querySelector("#no-source");
 
 try {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -17,7 +18,7 @@ try {
   });
   const sources = frameResult.result;
   if (sources.length === 0) {
-    noSource.hidden = false;
+    withoutSources.hidden = false;
   } else {
     const srcMaxLength = 60;
     let selectedSource = sources.findIndex((source) => source.isPlaying);
@@ -29,7 +30,6 @@ try {
     if (selectedSource === -1) {
       selectedSource = 0;
     }
-    console.log("selectedSource", selectedSource);
     source.innerHTML = sources
       .map(
         ({ tagName, src, width, height, isPlaying }, i) =>
@@ -43,11 +43,11 @@ try {
       )
       .join("\n");
 
-    source.hidden = false;
+    withSources.hidden = false;
   }
 } catch (error) {
   console.error(error);
-  noSource.hidden = false;
+  withoutSources.hidden = false;
 } finally {
   progress.hidden = true;
 }
