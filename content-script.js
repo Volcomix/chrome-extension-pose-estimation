@@ -1,8 +1,11 @@
 import * as poseDetection from "@tensorflow-models/pose-detection";
 import "@tensorflow/tfjs-backend-webgl";
 
-const estimationConfig = {
-  maxPoses: 2,
+const detectorConfig = {
+  modelType: poseDetection.movenet.modelType.MULTIPOSE_LIGHTNING,
+  enableSmoothing: true,
+  enableTracking: true,
+  trackerType: poseDetection.TrackerType.BoundingBox,
 };
 
 let detector;
@@ -11,19 +14,29 @@ let animationFrame;
 let isRunning = false;
 
 async function loadPoseDetection() {
-  const model = poseDetection.SupportedModels.PoseNet;
-  detector = await poseDetection.createDetector(model);
+  detector = await poseDetection.createDetector(
+    poseDetection.SupportedModels.MoveNet,
+    detectorConfig
+  );
 
   video = document.querySelector("video");
-  video.width = video.videoWidth;
-  video.height = video.videoHeight;
+
+  chrome.runtime.sendMessage({
+    name: "loaded",
+    videoWidth: video.videoWidth,
+    videoHeight: video.videoHeight,
+  });
 }
 
 async function estimatePoses() {
   if (!isRunning) {
     return;
   }
-  const poses = await detector.estimatePoses(video, estimationConfig);
+  if (video.readyState < 2) {
+    animationFrame = requestAnimationFrame(estimatePoses);
+    return;
+  }
+  const poses = await detector.estimatePoses(video);
   chrome.runtime.sendMessage({ poses });
   animationFrame = requestAnimationFrame(estimatePoses);
 }
