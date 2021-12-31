@@ -39,8 +39,6 @@ chrome.runtime.onMessage.addListener((message, sender) => {
     const tabId = sender.tab.id;
     if (tabId in connections) {
       connections[tabId].postMessage(message);
-    } else {
-      console.log("Tab not found in connection list.");
     }
   }
 });

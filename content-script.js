@@ -13,6 +13,8 @@ let video;
 let animationFrame;
 let isRunning = false;
 
+loadPoseDetection();
+
 async function loadPoseDetection() {
   detector = await poseDetection.createDetector(
     poseDetection.SupportedModels.MoveNet,
@@ -57,5 +59,3 @@ chrome.runtime.onMessage.addListener((message) => {
       break;
   }
 });
-
-loadPoseDetection();
