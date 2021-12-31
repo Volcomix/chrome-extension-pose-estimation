@@ -3,11 +3,11 @@ body {
   display: grid;
   grid-template:
     "canvas" calc(100vw * 9 / 16)
-    "button" auto;
+    "start-stop" auto;
   row-gap: 16px;
 }
 
-#canvas {
+canvas {
   grid-area: canvas;
   width: 100%;
   height: 100%;
@@ -21,7 +21,7 @@ body {
   color: white;
 }
 
-#button {
-  grid-area: button;
+#start-stop {
+  grid-area: start-stop;
   justify-self: center;
 }

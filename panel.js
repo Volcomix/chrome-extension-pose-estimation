@@ -1,6 +1,6 @@
-const canvas = document.getElementById("canvas");
-const framerate = document.getElementById("framerate");
-const button = document.getElementById("button");
+const canvas = document.querySelector("canvas");
+const framerate = document.querySelector("#framerate");
+const startStopButton = document.querySelector("#start-stop");
 
 const ctx = canvas.getContext("2d");
 
@@ -15,7 +15,7 @@ let frameCount = 0;
 
 port.onMessage.addListener((message) => {
   if (message.name === "loaded") {
-    button.disabled = false;
+    startStopButton.disabled = false;
     canvas.width = message.videoWidth;
     canvas.height = message.videoHeight;
   } else if (message.poses) {
@@ -38,11 +38,11 @@ port.onMessage.addListener((message) => {
   }
 });
 
-button.innerText = "Start";
+startStopButton.innerText = "Start";
 let isRunning = false;
-button.onclick = () => {
+startStopButton.onclick = () => {
   isRunning = !isRunning;
-  button.innerText = isRunning ? "Stop" : "Start";
+  startStopButton.innerText = isRunning ? "Stop" : "Start";
   port.postMessage({
     name: isRunning ? "start" : "stop",
     tabId: chrome.devtools.inspectedWindow.tabId,
