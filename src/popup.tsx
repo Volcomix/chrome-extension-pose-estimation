@@ -20,7 +20,7 @@ function Popup() {
 
   let candidateVideos = videos.filter((video) => video.playing)
   if (candidateVideos.length === 0) {
-    candidateVideos = videos
+    candidateVideos = [...videos]
   }
   candidateVideos.sort((a, b) => b.width - a.width)
 
@@ -39,7 +39,10 @@ function Popup() {
 
   return (
     <div className="Popup">
-      <select className="Popup-videos">
+      <select
+        className="Popup-videos"
+        disabled={detectionStatus !== undefined && detectionStatus !== 'loaded'}
+      >
         {videos.map((video, i) => (
           <option key={i} value={i} selected={video === candidateVideos[0]}>
             {video.playing && '▸ '}
