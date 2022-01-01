@@ -11,14 +11,14 @@
     "build": "esbuild src/popup.tsx --inject:src/preact-shim.ts --jsx-factory=h --jsx-fragment=Fragment --bundle --outdir=out"
   },
   "dependencies": {
-    "@mediapipe/pose": "~0.4.0",
+    "@mediapipe/pose": "~0.5.1635988162",
     "@tensorflow-models/pose-detection": "^0.0.6",
     "@tensorflow/tfjs-backend-wasm": "^3.12.0",
     "@tensorflow/tfjs-backend-webgl": "^3.12.0",
     "@tensorflow/tfjs-converter": "^3.12.0",
     "@tensorflow/tfjs-core": "^3.12.0",
     "@types/chrome": "^0.0.174",
-    "esbuild": "^0.14.9",
+    "esbuild": "^0.14.10",
     "preact": "^10.6.4"
   }
 }
