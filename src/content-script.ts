@@ -4,7 +4,6 @@ import {
   DetectionMessage,
   DetectionStatus,
   DetectionStatusMessage,
-  MessageType,
 } from './types'
 
 const detectorConfig = {
@@ -20,14 +19,14 @@ let detector: poseDetection.PoseDetector | undefined
 chrome.runtime.onMessage.addListener(
   (message: DetectionMessage, _sender, sendResponse) => {
     switch (message.type) {
-      case MessageType.RetrieveDetectionStatus:
+      case 'RetrieveDetectionStatus':
         sendResponse(detectionStatus)
         break
-      case MessageType.StartDetection:
+      case 'StartDetection':
         detectionStatus = 'running'
         sendStatus()
         break
-      case MessageType.StopDetection:
+      case 'StopDetection':
         detectionStatus = 'loaded'
         sendStatus()
         break
@@ -49,7 +48,7 @@ async function loadPoseDetection() {
 
 function sendStatus() {
   const message: DetectionStatusMessage = {
-    type: MessageType.DetectionStatus,
+    type: 'DetectionStatus',
     detectionStatus,
   }
   chrome.runtime.sendMessage(message)

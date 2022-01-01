@@ -8,28 +8,21 @@ export type Video = {
   playing: boolean
 }
 
-export enum MessageType {
-  RetrieveDetectionStatus = 'RetrieveDetectionStatus',
-  DetectionStatus = 'DetectionStatus',
-  StartDetection = 'StartDetection',
-  StopDetection = 'StopDetection',
-}
-
 export type RetrieveDetectionStatusMessage = {
-  type: MessageType.RetrieveDetectionStatus
+  type: 'RetrieveDetectionStatus'
 }
 
 export type DetectionStatusMessage = {
-  type: MessageType.DetectionStatus
+  type: 'DetectionStatus'
   detectionStatus: DetectionStatus
 }
 
 export type StartDetectionMessage = {
-  type: MessageType.StartDetection
+  type: 'StartDetection'
 }
 
 export type StopDetectionMessage = {
-  type: MessageType.StopDetection
+  type: 'StopDetection'
 }
 
 export type DetectionMessage =
