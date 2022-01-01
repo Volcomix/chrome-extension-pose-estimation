@@ -13,10 +13,17 @@ function Popup() {
   if (videos.length === 0) {
     return <span className="Popup-noVideos">No videos found</span>
   }
+
+  let candidateVideos = videos.filter((video) => video.playing)
+  if (candidateVideos.length === 0) {
+    candidateVideos = videos
+  }
+  candidateVideos.sort((a, b) => b.width - a.width)
+
   return (
     <select>
       {videos.map((video, i) => (
-        <option key={i} value={i}>
+        <option key={i} value={i} selected={video === candidateVideos[0]}>
           {video.playing && '▸ '}
           {video.src.substr(0, videoSrcMaxLength) || 'video'}
           {video.src.length > videoSrcMaxLength && '…'}
