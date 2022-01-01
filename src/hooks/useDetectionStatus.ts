@@ -31,7 +31,7 @@ export default function useDetectionStatus(
     if (message.type !== MessageType.DetectionStatus) {
       return
     }
-    console.debug('Detection status received', message)
+    console.debug('Detection status received:', message.detectionStatus)
     setDetectionStatus(message.detectionStatus)
   }
 
