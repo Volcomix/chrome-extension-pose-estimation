@@ -12,7 +12,7 @@ function Popup() {
   const activeTab = useActiveTab()
   const detectionStatus = useDetectionStatus(activeTab)
   const videos = useVideos(activeTab, detectionStatus)
-  const [selectedVideo, setSelectedVideo] = useState(0)
+  const [selectedVideoIndex, setSelectedVideoIndex] = useState(0)
 
   useEffect(() => {
     if (!videos?.length) {
@@ -23,7 +23,7 @@ function Popup() {
       candidateVideos = [...videos]
     }
     candidateVideos.sort((a, b) => b.width - a.width)
-    setSelectedVideo(videos.indexOf(candidateVideos[0]))
+    setSelectedVideoIndex(candidateVideos[0].index)
   }, [videos])
 
   if (!videos) {
@@ -33,21 +33,21 @@ function Popup() {
     return <span className="Popup-noVideos">No videos found</span>
   }
 
-  function handleDetectionButtonClick() {
+  async function handleDetectionButtonClick() {
     if (!activeTab || !videos) {
       return
     }
+    const selectedVideo = videos[selectedVideoIndex]
     switch (detectionStatus) {
       case undefined:
-        const video = videos[selectedVideo]
-        chrome.scripting.executeScript({
-          target: { tabId: activeTab.id!, frameIds: [video.frameId] },
+        await chrome.scripting.executeScript({
+          target: { tabId: activeTab.id! },
           files: ['out/content-script.js'],
         })
-        break
       case 'loaded':
         const startDetectionMessage: StartDetectionMessage = {
           type: 'StartDetection',
+          video: selectedVideo,
         }
         chrome.tabs.sendMessage(activeTab.id!, startDetectionMessage)
         break
@@ -65,13 +65,15 @@ function Popup() {
       <select
         className="Popup-videos"
         disabled={detectionStatus !== undefined && detectionStatus !== 'loaded'}
-        value={selectedVideo}
+        value={selectedVideoIndex}
         onInput={(event) =>
-          setSelectedVideo(Number((event.target as HTMLSelectElement).value))
+          setSelectedVideoIndex(
+            Number((event.target as HTMLSelectElement).value),
+          )
         }
       >
-        {videos.map((video, i) => (
-          <option key={i} value={i}>
+        {videos.map((video) => (
+          <option key={video.index} value={video.index}>
             {video.playing && '▸ '}
             {video.src.substr(0, videoSrcMaxLength) || 'video'}
             {video.src.length > videoSrcMaxLength && '…'}

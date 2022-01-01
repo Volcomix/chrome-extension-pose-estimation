@@ -1,12 +1,12 @@
-export type DetectionStatus = 'loading' | 'loaded' | 'running'
-
 export type Video = {
-  frameId: number
+  index: number
   src: string
   width: number
   height: number
   playing: boolean
 }
+
+export type DetectionStatus = 'loading' | 'loaded' | 'running'
 
 export type RetrieveDetectionStatusMessage = {
   type: 'RetrieveDetectionStatus'
@@ -19,6 +19,7 @@ export type DetectionStatusMessage = {
 
 export type StartDetectionMessage = {
   type: 'StartDetection'
+  video: Video
 }
 
 export type StopDetectionMessage = {

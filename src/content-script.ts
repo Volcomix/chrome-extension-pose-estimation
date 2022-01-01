@@ -15,6 +15,7 @@ const detectorConfig = {
 
 let detectionStatus: DetectionStatus = 'loading'
 let detector: poseDetection.PoseDetector | undefined
+let video: HTMLVideoElement | undefined
 
 chrome.runtime.onMessage.addListener(
   (message: DetectionMessage, _sender, sendResponse) => {
@@ -23,8 +24,12 @@ chrome.runtime.onMessage.addListener(
         sendResponse(detectionStatus)
         break
       case 'StartDetection':
-        detectionStatus = 'running'
-        sendStatus()
+        video = document.querySelectorAll('video')[message.video.index]
+        console.debug('Starting pose detection', video)
+        if (detectionStatus === 'loaded') {
+          detectionStatus = 'running'
+          sendStatus()
+        }
         break
       case 'StopDetection':
         detectionStatus = 'loaded'
@@ -42,7 +47,11 @@ async function loadPoseDetection() {
     poseDetection.SupportedModels.MoveNet,
     detectorConfig,
   )
-  detectionStatus = 'running'
+  if (video) {
+    detectionStatus = 'running'
+  } else {
+    detectionStatus = 'loaded'
+  }
   sendStatus()
 }
 

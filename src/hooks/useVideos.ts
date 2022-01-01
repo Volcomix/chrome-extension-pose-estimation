@@ -15,12 +15,11 @@ export default function useVideos(
       return
     }
     try {
-      const injectionResults = await chrome.scripting.executeScript({
-        target: { tabId: activeTab.id!, allFrames: true },
+      const [frameResult] = await chrome.scripting.executeScript({
+        target: { tabId: activeTab.id! },
         func: () =>
           [...document.querySelectorAll('video')].map<Video>(
             (videoElement, videoIndex) => ({
-              frameId: -1,
               index: videoIndex,
               src: videoElement.src,
               width: videoElement.videoWidth ?? videoElement.width,
@@ -29,13 +28,7 @@ export default function useVideos(
             }),
           ),
       })
-      const results = injectionResults.flatMap<Video>((frameResult) =>
-        frameResult.result.map((video: Video) => ({
-          ...video,
-          frameId: frameResult.frameId,
-        })),
-      )
-      setVideos(results)
+      setVideos(frameResult.result)
     } catch (error) {
       console.error(error)
       setVideos([])
