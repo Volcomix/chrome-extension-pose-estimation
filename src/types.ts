@@ -8,7 +8,6 @@ export type DetectionStatus =
   | 'starting'
   | 'running'
   | 'stopping'
-  | 'error'
 
 export type Video = {
   frameId: number

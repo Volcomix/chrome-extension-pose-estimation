@@ -2,6 +2,16 @@ body {
   margin: 16px;
 }
 
+.Popup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .Popup-noVideos {
   white-space: nowrap;
+}
+
+.Popup-videos {
+  margin-bottom: 8px;
 }
