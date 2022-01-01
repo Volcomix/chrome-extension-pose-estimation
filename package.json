@@ -6,7 +6,6 @@
   "author": "Volcomix <Volcomix@users.noreply.github.com>",
   "license": "MIT",
   "private": true,
-  "sideEffects": false,
   "scripts": {
     "dev": "yarn build --watch",
     "build": "esbuild src/content-script.ts src/popup.tsx --inject:src/preact-shim.ts --jsx-factory=h --jsx-fragment=Fragment --bundle --outdir=out"

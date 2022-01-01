@@ -1,4 +1,10 @@
-import * as poseDetection from '@tensorflow-models/pose-detection'
+import {
+  createDetector,
+  movenet,
+  PoseDetector,
+  SupportedModels,
+  TrackerType,
+} from '@tensorflow-models/pose-detection'
 import '@tensorflow/tfjs-backend-webgl'
 import {
   DetectionMessage,
@@ -8,14 +14,14 @@ import {
 } from './types'
 
 const detectorConfig = {
-  modelType: poseDetection.movenet.modelType.MULTIPOSE_LIGHTNING,
+  modelType: movenet.modelType.MULTIPOSE_LIGHTNING,
   enableSmoothing: true,
   enableTracking: true,
-  trackerType: poseDetection.TrackerType.BoundingBox,
+  trackerType: TrackerType.BoundingBox,
 }
 
 let detectionStatus: DetectionStatus = 'loading'
-let detector: poseDetection.PoseDetector | undefined
+let detector: PoseDetector | undefined
 let video: HTMLVideoElement | undefined
 let animationFrame = -1
 
@@ -44,10 +50,7 @@ loadPoseDetection()
 
 async function loadPoseDetection() {
   sendStatus()
-  detector = await poseDetection.createDetector(
-    poseDetection.SupportedModels.MoveNet,
-    detectorConfig,
-  )
+  detector = await createDetector(SupportedModels.MoveNet, detectorConfig)
   if (video) {
     startPoseDetection()
   } else {
