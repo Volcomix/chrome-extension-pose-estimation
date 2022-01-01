@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'preact/hooks'
-import { Video } from '../types'
-import useActiveTab from './useActiveTab'
-import useDetectionStatus from './useDetectionStatus'
+import { DetectionStatus, Video } from '../types'
 
-export default function useVideos() {
-  const activeTab = useActiveTab()
-  const detectionStatus = useDetectionStatus()
+export default function useVideos(
+  activeTab: chrome.tabs.Tab | undefined,
+  detectionStatus: DetectionStatus | undefined,
+) {
   const [videos, setVideos] = useState<Video[]>()
 
   async function findVideos() {

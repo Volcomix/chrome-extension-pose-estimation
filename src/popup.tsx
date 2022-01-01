@@ -1,4 +1,5 @@
 import { render } from 'preact'
+import useActiveTab from './hooks/useActiveTab'
 import useDetectionStatus from './hooks/useDetectionStatus'
 import useVideos from './hooks/useVideos'
 import './popup.css'
@@ -6,8 +7,9 @@ import './popup.css'
 const videoSrcMaxLength = 60
 
 function Popup() {
-  const detectionStatus = useDetectionStatus()
-  const videos = useVideos()
+  const activeTab = useActiveTab()
+  const detectionStatus = useDetectionStatus(activeTab)
+  const videos = useVideos(activeTab, detectionStatus)
 
   if (!videos) {
     return <progress />
@@ -21,6 +23,19 @@ function Popup() {
     candidateVideos = videos
   }
   candidateVideos.sort((a, b) => b.width - a.width)
+
+  function handleDetectionButtonClick() {
+    if (!activeTab) {
+      return
+    }
+    if (detectionStatus === undefined) {
+      chrome.scripting.executeScript({
+        target: { tabId: activeTab.id! },
+        files: ['out/content-script.js'],
+      })
+      return
+    }
+  }
 
   return (
     <div className="Popup">
@@ -40,6 +55,7 @@ function Popup() {
           detectionStatus === 'starting' ||
           detectionStatus === 'stopping'
         }
+        onClick={handleDetectionButtonClick}
       >
         {(detectionStatus === undefined || detectionStatus === 'loaded') &&
           'Start detection'}

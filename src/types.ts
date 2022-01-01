@@ -1,7 +1,3 @@
-export enum MessageType {
-  DetectionStatus = 'DetectionStatus',
-}
-
 export type DetectionStatus =
   | 'loading'
   | 'loaded'
@@ -15,4 +11,16 @@ export type Video = {
   width: number
   height: number
   playing: boolean
+}
+
+export enum MessageType {
+  DetectionStatus = 'DetectionStatus',
+}
+
+export type DetectionMessage = {
+  type: MessageType
+}
+
+export type DetectionStatusMessage = DetectionMessage & {
+  detectionStatus: DetectionStatus
 }
