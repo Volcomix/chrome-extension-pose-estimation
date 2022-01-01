@@ -11,8 +11,10 @@ const videoSrcMaxLength = 60
 function Popup() {
   const activeTab = useActiveTab()
   const detectionStatus = useDetectionStatus(activeTab)
-  const videos = useVideos(activeTab, detectionStatus)
+  const videos = useVideos(activeTab, detectionStatus?.status)
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(0)
+
+  const status = detectionStatus?.status
 
   useEffect(() => {
     if (!videos?.length) {
@@ -38,7 +40,7 @@ function Popup() {
       return
     }
     const selectedVideo = videos[selectedVideoIndex]
-    switch (detectionStatus) {
+    switch (status) {
       case undefined:
         await chrome.scripting.executeScript({
           target: { tabId: activeTab.id! },
@@ -64,7 +66,7 @@ function Popup() {
     <div className="Popup">
       <select
         className="Popup-videos"
-        disabled={detectionStatus !== undefined && detectionStatus !== 'loaded'}
+        disabled={status !== undefined && status !== 'loaded'}
         value={selectedVideoIndex}
         onInput={(event) =>
           setSelectedVideoIndex(
@@ -82,13 +84,12 @@ function Popup() {
         ))}
       </select>
       <button
-        disabled={detectionStatus === 'loading'}
+        disabled={status === 'loading'}
         onClick={handleDetectionButtonClick}
       >
-        {(detectionStatus === undefined || detectionStatus === 'loaded') &&
-          'Start detection'}
-        {detectionStatus === 'loading' && 'Starting detection...'}
-        {detectionStatus === 'running' && 'Stop detection'}
+        {(status === undefined || status === 'loaded') && 'Start detection'}
+        {status === 'loading' && 'Starting detection...'}
+        {status === 'running' && 'Stop detection'}
       </button>
     </div>
   )

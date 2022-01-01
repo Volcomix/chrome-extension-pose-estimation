@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'preact/hooks'
 import {
   DetectionMessage,
-  DetectionStatus,
+  DetectionStatusResponse,
   RetrieveDetectionStatusMessage,
 } from '../types'
 
 export default function useDetectionStatus(
   activeTab: chrome.tabs.Tab | undefined,
 ) {
-  const [detectionStatus, setDetectionStatus] = useState<DetectionStatus>()
+  const [detectionStatus, setDetectionStatus] =
+    useState<DetectionStatusResponse>()
 
   async function loadDetectionStatus() {
     if (!activeTab) {
@@ -17,8 +18,8 @@ export default function useDetectionStatus(
     const message: RetrieveDetectionStatusMessage = {
       type: 'RetrieveDetectionStatus',
     }
-    const response = await new Promise<DetectionStatus | undefined>((resolve) =>
-      chrome.tabs.sendMessage(activeTab.id!, message, resolve),
+    const response = await new Promise<DetectionStatusResponse | undefined>(
+      (resolve) => chrome.tabs.sendMessage(activeTab.id!, message, resolve),
     )
     if (!response) {
       console.debug('Detection content script not injected')
@@ -34,8 +35,11 @@ export default function useDetectionStatus(
     if (message.type !== 'DetectionStatus') {
       return
     }
-    console.debug('Detection status received:', message.detectionStatus)
-    setDetectionStatus(message.detectionStatus)
+    console.debug('Detection status received:', message.status)
+    setDetectionStatus({
+      status: message.status,
+      video: message.video,
+    })
   }
 
   useEffect(() => {

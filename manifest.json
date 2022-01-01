@@ -7,5 +7,6 @@
   "host_permissions": ["<all_urls>"],
   "action": {
     "default_popup": "popup.html"
-  }
+  },
+  "devtools_page": "devtools.html"
 }

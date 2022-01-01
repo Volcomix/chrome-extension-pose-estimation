@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "dev": "yarn build --watch",
-    "build": "esbuild src/content-script.ts src/popup.tsx --bundle --outdir=out"
+    "build": "esbuild src/content-script.ts src/popup.tsx src/devtools.tsx src/panel.tsx --bundle --outdir=out"
   },
   "dependencies": {
     "@mediapipe/pose": "~0.5.1635988162",

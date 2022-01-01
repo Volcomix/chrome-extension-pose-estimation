@@ -16,7 +16,8 @@ export type RetrieveDetectionStatusMessage = {
 
 export type DetectionStatusMessage = {
   type: 'DetectionStatus'
-  detectionStatus: DetectionStatus
+  status: DetectionStatus
+  video: Video | undefined
 }
 
 export type StartDetectionMessage = {
@@ -39,3 +40,8 @@ export type DetectionMessage =
   | StartDetectionMessage
   | StopDetectionMessage
   | PosesMessage
+
+export type DetectionStatusResponse = {
+  status: DetectionStatus
+  video: Video | undefined
+}

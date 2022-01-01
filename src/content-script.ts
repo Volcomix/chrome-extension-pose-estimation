@@ -10,7 +10,9 @@ import {
   DetectionMessage,
   DetectionStatus,
   DetectionStatusMessage,
+  DetectionStatusResponse,
   PosesMessage,
+  Video,
 } from './types'
 
 const detectorConfig = {
@@ -20,25 +22,31 @@ const detectorConfig = {
   trackerType: TrackerType.BoundingBox,
 }
 
-let detectionStatus: DetectionStatus = 'loading'
+let status: DetectionStatus = 'loading'
 let detector: PoseDetector | undefined
-let video: HTMLVideoElement | undefined
+let video: Video | undefined
+let videoElement: HTMLVideoElement | undefined
 let animationFrame = -1
 
 chrome.runtime.onMessage.addListener(
   (message: DetectionMessage, _sender, sendResponse) => {
     switch (message.type) {
       case 'RetrieveDetectionStatus':
-        sendResponse(detectionStatus)
+        const detectionStatusResponse: DetectionStatusResponse = {
+          status,
+          video,
+        }
+        sendResponse(detectionStatusResponse)
         break
       case 'StartDetection':
-        video = document.querySelectorAll('video')[message.video.index]
-        if (detectionStatus === 'loaded') {
+        video = message.video
+        videoElement = document.querySelectorAll('video')[video.index]
+        if (status === 'loaded') {
           startPoseDetection()
         }
         break
       case 'StopDetection':
-        detectionStatus = 'loaded'
+        status = 'loaded'
         cancelAnimationFrame(animationFrame)
         sendStatus()
         break
@@ -51,33 +59,33 @@ loadPoseDetection()
 async function loadPoseDetection() {
   sendStatus()
   detector = await createDetector(SupportedModels.MoveNet, detectorConfig)
-  if (video) {
+  if (videoElement) {
     startPoseDetection()
   } else {
-    detectionStatus = 'loaded'
+    status = 'loaded'
     sendStatus()
   }
 }
 
 function startPoseDetection() {
-  console.debug('Starting pose detection', video)
-  detectionStatus = 'running'
+  console.debug('Starting pose detection', videoElement)
+  status = 'running'
   animationFrame = requestAnimationFrame(detectPoses)
   sendStatus()
 }
 
 async function detectPoses() {
-  if (!detector || !video) {
+  if (!detector || !videoElement) {
     return
   }
-  if (detectionStatus !== 'running') {
+  if (status !== 'running') {
     return
   }
-  if (video.readyState < 2) {
+  if (videoElement.readyState < 2) {
     animationFrame = requestAnimationFrame(detectPoses)
     return
   }
-  const poses = await detector.estimatePoses(video)
+  const poses = await detector.estimatePoses(videoElement)
   const message: PosesMessage = { type: 'Poses', poses }
   chrome.runtime.sendMessage(message)
   animationFrame = requestAnimationFrame(detectPoses)
@@ -86,7 +94,8 @@ async function detectPoses() {
 function sendStatus() {
   const message: DetectionStatusMessage = {
     type: 'DetectionStatus',
-    detectionStatus,
+    status,
+    video,
   }
   chrome.runtime.sendMessage(message)
 }
