@@ -1,3 +1,5 @@
+import { Pose } from '@tensorflow-models/pose-detection'
+
 export type Video = {
   index: number
   src: string
@@ -26,8 +28,14 @@ export type StopDetectionMessage = {
   type: 'StopDetection'
 }
 
+export type PosesMessage = {
+  type: 'Poses'
+  poses: Pose[]
+}
+
 export type DetectionMessage =
   | RetrieveDetectionStatusMessage
   | DetectionStatusMessage
   | StartDetectionMessage
   | StopDetectionMessage
+  | PosesMessage
