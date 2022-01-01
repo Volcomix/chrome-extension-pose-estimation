@@ -1,6 +1,11 @@
 import * as poseDetection from '@tensorflow-models/pose-detection'
 import '@tensorflow/tfjs-backend-webgl'
-import { DetectionStatus, MessageType } from './types'
+import {
+  DetectionMessage,
+  DetectionStatus,
+  DetectionStatusMessage,
+  MessageType,
+} from './types'
 
 const detectorConfig = {
   modelType: poseDetection.movenet.modelType.MULTIPOSE_LIGHTNING,
@@ -12,21 +17,23 @@ const detectorConfig = {
 let detectionStatus: DetectionStatus = 'loading'
 let detector: poseDetection.PoseDetector | undefined
 
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  switch (message.type) {
-    case MessageType.DetectionStatus:
-      sendResponse(detectionStatus)
-      break
-    case MessageType.StartDetection:
-      detectionStatus = 'running'
-      sendStatus()
-      break
-    case MessageType.StopDetection:
-      detectionStatus = 'loaded'
-      sendStatus()
-      break
-  }
-})
+chrome.runtime.onMessage.addListener(
+  (message: DetectionMessage, _sender, sendResponse) => {
+    switch (message.type) {
+      case MessageType.RetrieveDetectionStatus:
+        sendResponse(detectionStatus)
+        break
+      case MessageType.StartDetection:
+        detectionStatus = 'running'
+        sendStatus()
+        break
+      case MessageType.StopDetection:
+        detectionStatus = 'loaded'
+        sendStatus()
+        break
+    }
+  },
+)
 
 loadPoseDetection()
 
@@ -41,8 +48,9 @@ async function loadPoseDetection() {
 }
 
 function sendStatus() {
-  chrome.runtime.sendMessage({
+  const message: DetectionStatusMessage = {
     type: MessageType.DetectionStatus,
     detectionStatus,
-  })
+  }
+  chrome.runtime.sendMessage(message)
 }

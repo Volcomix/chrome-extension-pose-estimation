@@ -4,7 +4,11 @@ import useActiveTab from './hooks/useActiveTab'
 import useDetectionStatus from './hooks/useDetectionStatus'
 import useVideos from './hooks/useVideos'
 import './popup.css'
-import { MessageType } from './types'
+import {
+  MessageType,
+  StartDetectionMessage,
+  StopDetectionMessage,
+} from './types'
 
 const videoSrcMaxLength = 60
 
@@ -46,14 +50,16 @@ function Popup() {
         })
         break
       case 'loaded':
-        chrome.tabs.sendMessage(activeTab.id!, {
+        const startDetectionMessage: StartDetectionMessage = {
           type: MessageType.StartDetection,
-        })
+        }
+        chrome.tabs.sendMessage(activeTab.id!, startDetectionMessage)
         break
       case 'running':
-        chrome.tabs.sendMessage(activeTab.id!, {
+        const stopDetectionMessage: StopDetectionMessage = {
           type: MessageType.StopDetection,
-        })
+        }
+        chrome.tabs.sendMessage(activeTab.id!, stopDetectionMessage)
         break
     }
   }
