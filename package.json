@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "dev": "yarn build --watch",
-    "build": "esbuild src/content-script.ts src/popup.tsx --inject:src/preact-shim.ts --jsx-factory=h --jsx-fragment=Fragment --bundle --outdir=out"
+    "build": "esbuild src/content-script.ts src/popup.tsx --bundle --outdir=out"
   },
   "dependencies": {
     "@mediapipe/pose": "~0.5.1635988162",

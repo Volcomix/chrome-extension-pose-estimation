@@ -1,4 +1,4 @@
-import { render } from 'preact'
+import { h, render } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 import useActiveTab from './hooks/useActiveTab'
 import useDetectionStatus from './hooks/useDetectionStatus'
