@@ -4,6 +4,7 @@ import useActiveTab from './hooks/useActiveTab'
 import useDetectionStatus from './hooks/useDetectionStatus'
 import useVideos from './hooks/useVideos'
 import './popup.css'
+import { MessageType } from './types'
 
 const videoSrcMaxLength = 60
 
@@ -33,15 +34,27 @@ function Popup() {
   }
 
   function handleDetectionButtonClick() {
-    if (!activeTab) {
+    if (!activeTab || !videos) {
       return
     }
-    if (detectionStatus === undefined) {
-      chrome.scripting.executeScript({
-        target: { tabId: activeTab.id! },
-        files: ['out/content-script.js'],
-      })
-      return
+    switch (detectionStatus) {
+      case undefined:
+        const video = videos[selectedVideo]
+        chrome.scripting.executeScript({
+          target: { tabId: activeTab.id!, frameIds: [video.frameId] },
+          files: ['out/content-script.js'],
+        })
+        break
+      case 'loaded':
+        chrome.tabs.sendMessage(activeTab.id!, {
+          type: MessageType.StartDetection,
+        })
+        break
+      case 'running':
+        chrome.tabs.sendMessage(activeTab.id!, {
+          type: MessageType.StopDetection,
+        })
+        break
     }
   }
 
@@ -65,19 +78,13 @@ function Popup() {
         ))}
       </select>
       <button
-        disabled={
-          detectionStatus === 'loading' ||
-          detectionStatus === 'starting' ||
-          detectionStatus === 'stopping'
-        }
+        disabled={detectionStatus === 'loading'}
         onClick={handleDetectionButtonClick}
       >
         {(detectionStatus === undefined || detectionStatus === 'loaded') &&
           'Start detection'}
-        {(detectionStatus === 'loading' || detectionStatus === 'starting') &&
-          'Starting detection...'}
+        {detectionStatus === 'loading' && 'Starting detection...'}
         {detectionStatus === 'running' && 'Stop detection'}
-        {detectionStatus === 'stopping' && 'Stopping detection...'}
       </button>
     </div>
   )

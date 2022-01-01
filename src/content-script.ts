@@ -12,6 +12,22 @@ const detectorConfig = {
 let detectionStatus: DetectionStatus = 'loading'
 let detector: poseDetection.PoseDetector | undefined
 
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  switch (message.type) {
+    case MessageType.DetectionStatus:
+      sendResponse(detectionStatus)
+      break
+    case MessageType.StartDetection:
+      detectionStatus = 'running'
+      sendStatus()
+      break
+    case MessageType.StopDetection:
+      detectionStatus = 'loaded'
+      sendStatus()
+      break
+  }
+})
+
 loadPoseDetection()
 
 async function loadPoseDetection() {
@@ -20,7 +36,7 @@ async function loadPoseDetection() {
     poseDetection.SupportedModels.MoveNet,
     detectorConfig,
   )
-  detectionStatus = 'loaded'
+  detectionStatus = 'running'
   sendStatus()
 }
 
@@ -30,11 +46,3 @@ function sendStatus() {
     detectionStatus,
   })
 }
-
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  switch (message.type) {
-    case MessageType.DetectionStatus:
-      sendResponse(detectionStatus)
-      break
-  }
-})

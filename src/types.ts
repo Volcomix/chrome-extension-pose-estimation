@@ -1,9 +1,4 @@
-export type DetectionStatus =
-  | 'loading'
-  | 'loaded'
-  | 'starting'
-  | 'running'
-  | 'stopping'
+export type DetectionStatus = 'loading' | 'loaded' | 'running'
 
 export type Video = {
   frameId: number
@@ -15,6 +10,8 @@ export type Video = {
 
 export enum MessageType {
   DetectionStatus = 'DetectionStatus',
+  StartDetection = 'StartDetection',
+  StopDetection = 'StopDetection',
 }
 
 export type DetectionMessage = {
