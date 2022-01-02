@@ -1,3 +1,4 @@
+import { DetectedObject } from '@tensorflow-models/coco-ssd'
 import { Pose } from '@tensorflow-models/pose-detection'
 
 export type Video = {
@@ -9,6 +10,11 @@ export type Video = {
 }
 
 export type DetectionStatus = 'loading' | 'loaded' | 'running' | 'error'
+
+export type InitDevtoolsMessage = {
+  type: 'InitDevtools'
+  tabId: number
+}
 
 export type RetrieveDetectionStatusMessage = {
   type: 'RetrieveDetectionStatus'
@@ -34,12 +40,19 @@ export type PosesMessage = {
   poses: Pose[]
 }
 
+export type ObjectsMessage = {
+  type: 'Objects'
+  objects: DetectedObject[]
+}
+
 export type DetectionMessage =
+  | InitDevtoolsMessage
   | RetrieveDetectionStatusMessage
   | DetectionStatusMessage
   | StartDetectionMessage
   | StopDetectionMessage
   | PosesMessage
+  | ObjectsMessage
 
 export type DetectionStatusResponse = {
   status: DetectionStatus

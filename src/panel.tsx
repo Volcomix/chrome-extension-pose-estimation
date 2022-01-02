@@ -3,8 +3,16 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import useActiveTab from './hooks/useActiveTab'
 import useDetectionStatus from './hooks/useDetectionStatus'
 import './panel.css'
-import { DetectionMessage } from './types'
+import { DetectionMessage, InitDevtoolsMessage } from './types'
+import { renderObjects } from './utils/object'
 import { renderPoses } from './utils/pose'
+
+const port = chrome.runtime.connect({ name: 'devtools' })
+const message: InitDevtoolsMessage = {
+  type: 'InitDevtools',
+  tabId: chrome.devtools.inspectedWindow.tabId,
+}
+port.postMessage(message)
 
 function Panel() {
   const activeTab = useActiveTab()
@@ -20,7 +28,7 @@ function Panel() {
     if (!ctx || !video) {
       return
     }
-    if (message.type !== 'Poses') {
+    if (message.type !== 'Poses' && message.type !== 'Objects') {
       return
     }
     const time = Date.now()
@@ -32,12 +40,16 @@ function Panel() {
       previousTimeRef.current = time
       frameCountRef.current = 0
     }
-    renderPoses(ctx, message.poses)
+    if (message.type === 'Poses') {
+      renderPoses(ctx, message.poses)
+    } else if (message.type === 'Objects') {
+      renderObjects(ctx, message.objects)
+    }
   }
 
   useEffect(() => {
-    chrome.runtime.onMessage.addListener(handleMessage)
-    return () => chrome.runtime.onMessage.removeListener(handleMessage)
+    port.onMessage.addListener(handleMessage)
+    return () => port.onMessage.removeListener(handleMessage)
   }, [ctx, video])
 
   return (

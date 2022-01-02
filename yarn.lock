@@ -2,10 +2,15 @@
 # yarn lockfile v1
 
 
-"@mediapipe/pose@~0.5.1635988162":
-  version "0.5.1635988162"
-  resolved "https://registry.yarnpkg.com/@mediapipe/pose/-/pose-0.5.1635988162.tgz#905e626cb07bce86c692d8ec057f04558ddd26fe"
-  integrity sha512-t0dpl+iG/MTPtPPxEYHyVWo+X7G+qgYUYaB4y9pxavQRNzuQQeHeSmUnT+A8qOKnuB0ccxgyrrFmGUaaL0F3wQ==
+"@mediapipe/pose@~0.4.0":
+  version "0.4.1633558788"
+  resolved "https://registry.yarnpkg.com/@mediapipe/pose/-/pose-0.4.1633558788.tgz#8af58433b4121278daf33b30ba0d1407a24edcea"
+  integrity sha512-tD89b08CE6tF3lNNFfFTd8o4E9iOD4uKqQ++AbDv9GOImnUx5iMkMWnadQjav2sYGJ1V3qUtiHLLKfmUAW6WBg==
+
+"@tensorflow-models/coco-ssd@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@tensorflow-models/coco-ssd/-/coco-ssd-2.2.2.tgz#2a308b3b11a106bf640c5245b980c79df8208b60"
+  integrity sha512-Jey2JscmKEValcFZH2ZLz14s8KPRmVtfJ0d0M3dPhvBp9dJiGNanVXr/pJAY5OS7emKj9uSciGhdkHWXY9Hovw==
 
 "@tensorflow-models/pose-detection@^0.0.6":
   version "0.0.6"
@@ -14,7 +19,7 @@
   dependencies:
     rimraf "^3.0.2"
 
-"@tensorflow/tfjs-backend-cpu@3.12.0":
+"@tensorflow/tfjs-backend-cpu@3.12.0", "@tensorflow/tfjs-backend-cpu@^3.12.0":
   version "3.12.0"
   resolved "https://registry.yarnpkg.com/@tensorflow/tfjs-backend-cpu/-/tfjs-backend-cpu-3.12.0.tgz#a96279c3116486dfb5deccf8bac78f72d3f77f65"
   integrity sha512-UMf/OHHCzm/+oKXtTDnanlyYFNNKKU5u2hJooKak1JqSOEKChBOPYKmxf9VWmY7Pos4GbbKH/V1pLzfLnLq+Bg==

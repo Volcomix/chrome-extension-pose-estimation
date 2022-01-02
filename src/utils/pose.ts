@@ -55,7 +55,8 @@ const colorPalette = [
 ]
 
 export function renderPoses(ctx: CanvasRenderingContext2D, poses: Pose[]) {
-  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+  ctx.fillStyle = '#101010'
+  ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
   for (const pose of poses) {
     drawKeypoints(ctx, pose.keypoints)
     drawSkeleton(ctx, pose.keypoints, pose.id)

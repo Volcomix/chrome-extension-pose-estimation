@@ -44,7 +44,7 @@ function Popup() {
       case undefined:
         await chrome.scripting.executeScript({
           target: { tabId: activeTab.id! },
-          files: ['out/content-script.js'],
+          files: ['out/content-script-poses.js'],
         })
       case 'loaded':
       case 'error':
@@ -86,7 +86,7 @@ function Popup() {
       </select>
       {status === 'error' ? (
         <span>
-          Failed to start pose detection. Try to open{' '}
+          Failed to start detection. Try to open{' '}
           <a href={videos[selectedVideoIndex].src} target="_blank">
             the video
           </a>{' '}
