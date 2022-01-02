@@ -1,14 +1,18 @@
 import { h, render } from 'preact'
-import { useEffect, useState } from 'preact/hooks'
+import { useEffect, useRef, useState } from 'preact/hooks'
 import useActiveTab from './hooks/useActiveTab'
 import useDetectionStatus from './hooks/useDetectionStatus'
 import './panel.css'
 import { DetectionMessage } from './types'
+import { renderPoses } from './utils/pose'
 
 function Panel() {
   const activeTab = useActiveTab()
   const detectionStatus = useDetectionStatus(activeTab)
   const [ctx, setCtx] = useState<CanvasRenderingContext2D>()
+  const [framerate, setFramerate] = useState(0)
+  const previousTimeRef = useRef(0)
+  const frameCountRef = useRef(0)
 
   const video = detectionStatus?.video
 
@@ -19,9 +23,16 @@ function Panel() {
     if (message.type !== 'Poses') {
       return
     }
-    ctx.clearRect(0, 0, video.width, video.height)
-    ctx.fillStyle = 'red'
-    ctx.fillRect(0, 0, video.width, video.height)
+    const time = Date.now()
+    frameCountRef.current++
+    if (time >= previousTimeRef.current + 1000) {
+      setFramerate(
+        (1000 * frameCountRef.current) / (time - previousTimeRef.current),
+      )
+      previousTimeRef.current = time
+      frameCountRef.current = 0
+    }
+    renderPoses(ctx, message.poses)
   }
 
   useEffect(() => {
@@ -37,7 +48,7 @@ function Panel() {
         width={video?.width}
         height={video?.height}
       />
-      <span className="Panel-framerate"></span>
+      <span className="Panel-framerate">{Math.round(framerate)} fps</span>
     </div>
   )
 }

@@ -27,7 +27,7 @@ export default function useDetectionStatus(
       chrome.runtime.lastError
       return
     }
-    console.debug('Detection status retrieved:', response)
+    console.debug('Detection status retrieved', response)
     setDetectionStatus(response)
   }
 
@@ -35,7 +35,7 @@ export default function useDetectionStatus(
     if (message.type !== 'DetectionStatus') {
       return
     }
-    console.debug('Detection status received:', message.status)
+    console.debug('Detection status received', message)
     setDetectionStatus({
       status: message.status,
       video: message.video,
