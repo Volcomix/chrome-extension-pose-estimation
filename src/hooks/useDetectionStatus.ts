@@ -7,6 +7,7 @@ import {
 
 export default function useDetectionStatus(
   activeTab: chrome.tabs.Tab | undefined,
+  port?: chrome.runtime.Port,
 ) {
   const [detectionStatus, setDetectionStatus] =
     useState<DetectionStatusResponse>()
@@ -47,8 +48,13 @@ export default function useDetectionStatus(
   }, [activeTab])
 
   useEffect(() => {
-    chrome.runtime.onMessage.addListener(handleMessage)
-    return () => chrome.runtime.onMessage.removeListener(handleMessage)
+    if (port) {
+      port.onMessage.addListener(handleMessage)
+      return () => port.onMessage.removeListener(handleMessage)
+    } else {
+      chrome.runtime.onMessage.addListener(handleMessage)
+      return () => chrome.runtime.onMessage.removeListener(handleMessage)
+    }
   }, [])
 
   return detectionStatus

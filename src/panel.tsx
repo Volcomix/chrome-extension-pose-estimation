@@ -16,7 +16,7 @@ port.postMessage(message)
 
 function Panel() {
   const activeTab = useActiveTab()
-  const detectionStatus = useDetectionStatus(activeTab)
+  const detectionStatus = useDetectionStatus(activeTab, port)
   const [ctx, setCtx] = useState<CanvasRenderingContext2D>()
   const [framerate, setFramerate] = useState(0)
   const previousTimeRef = useRef(0)
