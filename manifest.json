@@ -8,5 +8,8 @@
   "action": {
     "default_popup": "popup.html"
   },
-  "devtools_page": "devtools.html"
+  "devtools_page": "devtools.html",
+  "background": {
+    "service_worker": "out/background.js"
+  }
 }
