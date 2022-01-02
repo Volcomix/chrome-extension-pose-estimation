@@ -1,6 +1,7 @@
 import {
   createDetector,
   movenet,
+  MoveNetModelConfig,
   PoseDetector,
   SupportedModels,
   TrackerType,
@@ -15,7 +16,7 @@ import {
   Video,
 } from './types'
 
-const detectorConfig = {
+const detectorConfig: MoveNetModelConfig = {
   modelType: movenet.modelType.MULTIPOSE_LIGHTNING,
   enableSmoothing: true,
   enableTracking: true,
