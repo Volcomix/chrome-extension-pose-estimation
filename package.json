@@ -1,7 +1,7 @@
 {
   "name": "pose-estimation-extension",
   "version": "1.0.0",
-  "description": "Chrome extension to estimate multiple poses from videos ",
+  "description": "Chrome extension to estimate multiple poses from videos",
   "repository": "https://github.com/Volcomix/chrome-extension-pose-estimation.git",
   "author": "Volcomix <Volcomix@users.noreply.github.com>",
   "license": "MIT",
