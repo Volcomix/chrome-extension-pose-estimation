@@ -15,3 +15,7 @@ body {
 .Popup-videos {
   margin-bottom: 8px;
 }
+
+.Popup-detectionButton {
+  white-space: nowrap;
+}

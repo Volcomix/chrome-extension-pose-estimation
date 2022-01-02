@@ -47,6 +47,7 @@ function Popup() {
           files: ['out/content-script.js'],
         })
       case 'loaded':
+      case 'error':
         const startDetectionMessage: StartDetectionMessage = {
           type: 'StartDetection',
           video: selectedVideo,
@@ -66,7 +67,7 @@ function Popup() {
     <div className="Popup">
       <select
         className="Popup-videos"
-        disabled={status !== undefined && status !== 'loaded'}
+        disabled={status === 'loading' || status === 'running'}
         value={selectedVideoIndex}
         onInput={(event) =>
           setSelectedVideoIndex(
@@ -83,14 +84,25 @@ function Popup() {
           </option>
         ))}
       </select>
-      <button
-        disabled={status === 'loading'}
-        onClick={handleDetectionButtonClick}
-      >
-        {(status === undefined || status === 'loaded') && 'Start detection'}
-        {status === 'loading' && 'Starting detection...'}
-        {status === 'running' && 'Stop detection'}
-      </button>
+      {status === 'error' ? (
+        <span>
+          Failed to start pose detection. Try to open{' '}
+          <a href={videos[selectedVideoIndex].src} target="_blank">
+            the video
+          </a>{' '}
+          directly instead
+        </span>
+      ) : (
+        <button
+          className="Popup-detectionButton"
+          disabled={status === 'loading'}
+          onClick={handleDetectionButtonClick}
+        >
+          {(status === undefined || status === 'loaded') && 'Start detection'}
+          {status === 'loading' && 'Starting detection...'}
+          {status === 'running' && 'Stop detection'}
+        </button>
+      )}
     </div>
   )
 }

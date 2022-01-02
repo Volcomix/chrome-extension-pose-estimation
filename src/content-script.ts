@@ -41,7 +41,7 @@ chrome.runtime.onMessage.addListener(
       case 'StartDetection':
         video = message.video
         videoElement = document.querySelectorAll('video')[video.index]
-        if (status === 'loaded') {
+        if (status === 'loaded' || status === 'error') {
           startPoseDetection()
         }
         break
@@ -85,10 +85,16 @@ async function detectPoses() {
     animationFrame = requestAnimationFrame(detectPoses)
     return
   }
-  const poses = await detector.estimatePoses(videoElement)
-  const message: PosesMessage = { type: 'Poses', poses }
-  chrome.runtime.sendMessage(message)
-  animationFrame = requestAnimationFrame(detectPoses)
+  try {
+    const poses = await detector.estimatePoses(videoElement)
+    const message: PosesMessage = { type: 'Poses', poses }
+    chrome.runtime.sendMessage(message)
+    animationFrame = requestAnimationFrame(detectPoses)
+  } catch (error) {
+    console.error(error)
+    status = 'error'
+    sendStatus()
+  }
 }
 
 function sendStatus() {

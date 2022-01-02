@@ -8,7 +8,7 @@ export type Video = {
   playing: boolean
 }
 
-export type DetectionStatus = 'loading' | 'loaded' | 'running'
+export type DetectionStatus = 'loading' | 'loaded' | 'running' | 'error'
 
 export type RetrieveDetectionStatusMessage = {
   type: 'RetrieveDetectionStatus'
