@@ -11,6 +11,8 @@ export type Video = {
 
 export type DetectionStatus = 'loading' | 'loaded' | 'running' | 'error'
 
+export type PageMessage = { from?: 'page' }
+
 export type InitDevtoolsMessage = {
   type: 'InitDevtools'
   tabId: number
@@ -20,7 +22,7 @@ export type RetrieveDetectionStatusMessage = {
   type: 'RetrieveDetectionStatus'
 }
 
-export type DetectionStatusMessage = {
+export type DetectionStatusMessage = PageMessage & {
   type: 'DetectionStatus'
   status: DetectionStatus
   video: Video | undefined
@@ -35,7 +37,7 @@ export type StopDetectionMessage = {
   type: 'StopDetection'
 }
 
-export type PosesMessage = {
+export type PosesMessage = PageMessage & {
   type: 'Poses'
   poses: Pose[]
 }

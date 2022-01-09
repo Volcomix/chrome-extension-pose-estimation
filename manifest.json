@@ -11,5 +11,11 @@
   "devtools_page": "devtools.html",
   "background": {
     "service_worker": "out/background.js"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["/node_modules/@mediapipe/pose/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }

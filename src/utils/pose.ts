@@ -3,11 +3,56 @@ import { Keypoint, Pose } from '@tensorflow-models/pose-detection'
 const defaultLineWidth = 2
 const defaultRadius = 4
 
+const blazeposeKeypointsBySide = {
+  left: [1, 2, 3, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31],
+  right: [4, 5, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32],
+  middle: [0],
+}
+
 const cocoKeypointsBySide = {
   left: [1, 3, 5, 7, 9, 11, 13, 15],
   right: [2, 4, 6, 8, 10, 12, 14, 16],
   middle: [0],
 }
+
+const blazeposeConnectedKeypointsPairs = [
+  [0, 1],
+  [0, 4],
+  [1, 2],
+  [2, 3],
+  [3, 7],
+  [4, 5],
+  [5, 6],
+  [6, 8],
+  [9, 10],
+  [11, 12],
+  [11, 13],
+  [11, 23],
+  [12, 14],
+  [14, 16],
+  [12, 24],
+  [13, 15],
+  [15, 17],
+  [16, 18],
+  [16, 20],
+  [15, 17],
+  [15, 19],
+  [15, 21],
+  [16, 22],
+  [17, 19],
+  [18, 20],
+  [23, 25],
+  [23, 24],
+  [24, 26],
+  [25, 27],
+  [26, 28],
+  [27, 29],
+  [28, 30],
+  [27, 31],
+  [28, 32],
+  [29, 31],
+  [30, 32],
+]
 
 const cocoConnectedKeypointsPairs = [
   [0, 1],
@@ -68,17 +113,17 @@ function drawKeypoints(ctx: CanvasRenderingContext2D, keypoints: Keypoint[]) {
   ctx.strokeStyle = 'white'
   ctx.lineWidth = defaultLineWidth
 
-  for (const i of cocoKeypointsBySide.middle) {
+  for (const i of blazeposeKeypointsBySide.middle) {
     drawKeypoint(ctx, keypoints[i])
   }
 
   ctx.fillStyle = 'green'
-  for (const i of cocoKeypointsBySide.left) {
+  for (const i of blazeposeKeypointsBySide.left) {
     drawKeypoint(ctx, keypoints[i])
   }
 
   ctx.fillStyle = 'orange'
-  for (const i of cocoKeypointsBySide.right) {
+  for (const i of blazeposeKeypointsBySide.right) {
     drawKeypoint(ctx, keypoints[i])
   }
 }
@@ -107,7 +152,7 @@ function drawSkeleton(
   ctx.strokeStyle = color
   ctx.lineWidth = defaultLineWidth
 
-  cocoConnectedKeypointsPairs.forEach(([i, j]) => {
+  blazeposeConnectedKeypointsPairs.forEach(([i, j]) => {
     const kp1 = keypoints[i]
     const kp2 = keypoints[j]
 

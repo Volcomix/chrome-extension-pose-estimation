@@ -44,7 +44,12 @@ function Popup() {
       case undefined:
         await chrome.scripting.executeScript({
           target: { tabId: activeTab.id! },
-          files: ['out/content-script-poses.js'],
+          files: ['out/content-script-poses-mediapipe.js'],
+        })
+        await chrome.scripting.executeScript({
+          target: { tabId: activeTab.id! },
+          files: ['out/poses-mediapipe.js'],
+          world: 'MAIN',
         })
       case 'loaded':
       case 'error':
