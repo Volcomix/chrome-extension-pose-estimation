@@ -47,6 +47,15 @@ export type ObjectsMessage = {
   objects: DetectedObject[]
 }
 
+export type InitScriptMessage = PageMessage & {
+  type: 'InitScript'
+}
+
+export type ExtensionDetailsMessage = {
+  type: 'ExtensionDetails'
+  extensionId: string
+}
+
 export type DetectionMessage =
   | InitDevtoolsMessage
   | RetrieveDetectionStatusMessage
@@ -55,6 +64,8 @@ export type DetectionMessage =
   | StopDetectionMessage
   | PosesMessage
   | ObjectsMessage
+  | InitScriptMessage
+  | ExtensionDetailsMessage
 
 export type DetectionStatusResponse = {
   status: DetectionStatus

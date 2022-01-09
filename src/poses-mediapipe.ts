@@ -9,15 +9,10 @@ import {
   DetectionMessage,
   DetectionStatus,
   DetectionStatusMessage,
+  InitScriptMessage,
   PosesMessage,
   Video,
 } from './types'
-
-const detectorConfig: BlazePoseMediaPipeModelConfig = {
-  runtime: 'mediapipe',
-  solutionPath:
-    'chrome-extension://eiikgpbcednodfoofgmddoabkbffamho/node_modules/@mediapipe/pose',
-}
 
 let status: DetectionStatus = 'loading'
 let detector: PoseDetector | undefined
@@ -32,6 +27,9 @@ window.addEventListener('message', (event: MessageEvent<DetectionMessage>) => {
   switch (event.data.type) {
     case 'RetrieveDetectionStatus':
       sendStatus()
+      break
+    case 'ExtensionDetails':
+      loadPoseDetection(event.data.extensionId)
       break
     case 'StartDetection':
       video = event.data.video
@@ -48,10 +46,18 @@ window.addEventListener('message', (event: MessageEvent<DetectionMessage>) => {
   }
 })
 
-loadPoseDetection()
+const initScriptMessage: InitScriptMessage = {
+  from: 'page',
+  type: 'InitScript',
+}
+window.postMessage(initScriptMessage)
 
-async function loadPoseDetection() {
+async function loadPoseDetection(extensionId: string) {
   sendStatus()
+  const detectorConfig: BlazePoseMediaPipeModelConfig = {
+    runtime: 'mediapipe',
+    solutionPath: `chrome-extension://${extensionId}/node_modules/@mediapipe/pose`,
+  }
   detector = await createDetector(SupportedModels.BlazePose, detectorConfig)
   if (videoElement) {
     startPoseDetection()
