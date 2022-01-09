@@ -46,6 +46,8 @@ window.addEventListener('message', (event: MessageEvent<DetectionMessage>) => {
   }
 })
 
+sendStatus()
+
 const initScriptMessage: InitScriptMessage = {
   from: 'page',
   type: 'InitScript',
@@ -53,7 +55,6 @@ const initScriptMessage: InitScriptMessage = {
 window.postMessage(initScriptMessage)
 
 async function loadPoseDetection(extensionId: string) {
-  sendStatus()
   const detectorConfig: BlazePoseMediaPipeModelConfig = {
     runtime: 'mediapipe',
     solutionPath: `chrome-extension://${extensionId}/node_modules/@mediapipe/pose`,
